@@ -57,6 +57,11 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
         fetchedResultsController.delegate = self
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        fetchedResultsController.delegate = nil
+    }
+    
     func setMapLocation () {
         let locationCoordinate = CLLocationCoordinate2DMake(displayLocation.latitude, displayLocation.longitude)
         
@@ -112,8 +117,7 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        println("Fetched NumberOfObjects: \(self.fetchedResultsController.sections![section].numberOfObjects)")
-        
+        //println("Fetched NumberOfObjects: \(self.fetchedResultsController.sections![section].numberOfObjects)")
         return self.fetchedResultsController.sections![section].numberOfObjects
     }
     
@@ -225,6 +229,13 @@ class PhotoAlbumViewController: UIViewController, UICollectionViewDataSource, UI
     }
     
     @IBAction func retrieveNewCollectionOfPhotos(sender: AnyObject) {
+        
+        if displayLocation.totalNumberOfPhotos?.integerValue < MAX_NUMBER_OF_PHOTOS {
+            self.alertVC = Helper.raiseInformationalAlert(inViewController: self, withTitle: "Error", message: "All available photos for this location have been retrieved.", completionHandler: { (alertAction) -> Void in
+                self.alertVC!.dismissViewControllerAnimated(true, completion: nil)
+            })
+            return
+        }
         
         //Reset settings of New Collection button
         self.imagesFullyLoaded = 0

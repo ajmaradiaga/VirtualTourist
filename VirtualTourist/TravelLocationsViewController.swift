@@ -87,11 +87,6 @@ class TravelLocationsViewController: UIViewController, MKMapViewDelegate, NSFetc
             case .Insert:
                 //println("Insert item")
                 addPinToMap(location)
-            case .Delete:
-                println("Delete item")
-                //self.photosCollectionView.deleteItemsAtIndexPaths([indexPath!])
-            case .Update:
-                println("Update item")
             default:
                 return
             }

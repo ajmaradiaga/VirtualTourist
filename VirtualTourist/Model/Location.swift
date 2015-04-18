@@ -19,6 +19,7 @@ class Location: NSManagedObject {
         static let Longitude = "longitude"
         static let Name = "name"
         static let TotalNumberOfPages = "totalNumberOfPages"
+        static let TotalNumberOfPhotos = "totalNumberOfPhotos"
         static let Photos = "photos"
     }
     
@@ -26,6 +27,7 @@ class Location: NSManagedObject {
     @NSManaged var longitude: Double
     @NSManaged var name: String?
     @NSManaged var totalNumberOfPages: NSNumber?
+    @NSManaged var totalNumberOfPhotos: NSNumber?
     @NSManaged var photos: NSSet
     
     var isFetchingForPhotos: Bool = false
@@ -90,6 +92,8 @@ class Location: NSManagedObject {
                 
                 let totalPhotos = (photosDictionary["total"] as? String)!.toInt()
                 
+                self.totalNumberOfPhotos = totalPhotos!
+                
                 if totalPhotos < self.photos.allObjects.count {
                     for index in 1...(self.photos.allObjects.count - totalPhotos!) {
                     CoreDataStackManager.sharedInstance().managedObjectContext!.deleteObject(self.photos.allObjects[index - 1] as! NSManagedObject)
@@ -125,7 +129,7 @@ class Location: NSManagedObject {
                         //Handle extra photo objects that might be under location
                         
                         for index in 1...min(photosArray.count, MAX_NUMBER_OF_PHOTOS) {
-                            println(index)
+                            //println(index)
                             let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
                             let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
                             
